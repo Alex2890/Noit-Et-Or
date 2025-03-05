@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+/* === Noir et Or Global Settings === */
+:root {
+  /* Color Palette */
+  --primary-gold: #d4af37;
+  --secondary-black: #000000;
+  --deep-charcoal: #2C2C2C;
+  --darker-charcoal: #2b2b2b;
+  --accent-charcoal: #1c1c1c;
+  --accent-offwhite: #f8f8f8;
+  --text-white: #ffffff;
+  --hover-darkgold: #b8860b;
+  --soft-gold: #e6d5b8;
+  --light-beige: #f5f5dc;
+  --champagne-gold: #f7e7ce;
+
+    /* New Section Backgrounds */
+    --bg-deep-burgundy-light: #7A2E2E;
+    --bg-midnight-blue: #1e2a38;
+
+  /* Font Families */
+  --font-title: "Dancing Script", cursive;
+  --font-body: "Parisienne", cursive;
+  --font-button: "Cormorant Upright", serif;
+}
+
+/* === Apply Global Fonts === */
+body {
+  font-family: var(--font-body);
+  background-color: var(--accent-offwhite);
+  color: var(--secondary-black);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
+  font-weight: 700;
+  color: var(--primary-gold);
+}
+
+button {
+  font-family: var(--font-button);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Ensure Links Inherit Color */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Active Link Styling */
+.active-link {
+  text-decoration: underline;
+  text-decoration-color: var(--hover-darkgold);
+}
