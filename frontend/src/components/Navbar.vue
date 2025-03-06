@@ -9,7 +9,7 @@
           </h1>
         </div>
 
-        <!-- Desktop Navigation + Login Button -->
+        <!-- Desktop Navigation -->
         <div class="hidden md:flex space-x-8 items-center">
           <router-link
             to="/"
@@ -47,8 +47,6 @@
           >
             Contact
           </router-link>
-          <!-- Login Button beside Contact Tab -->
-          <LoginButton />
         </div>
 
         <!-- Mobile Menu Button -->
@@ -98,10 +96,6 @@
       >
         Contact
       </router-link>
-      <!-- Login Button in Mobile Menu -->
-      <div class="py-3">
-        <LoginButton />
-      </div>
     </div>
 
     <!-- Scroll to Top Button -->
@@ -119,7 +113,6 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
-import LoginButton from './LoginButton.vue'; // Importing Login Button Component
 
 const mobileMenuOpen = ref(false);
 const showScrollToTop = ref(false);
