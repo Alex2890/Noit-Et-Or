@@ -9,12 +9,15 @@
       <div class="space-y-3 my-4">
         <GoogleLogin
           :callback="handleCallback"
+          :error="handleError"
           class="w-full flex items-center justify-center bg-[var(--primary-gold)] text-[var(--secondary-black)] py-2 px-4 rounded-lg transition hover:bg-[var(--hover-darkgold)]"
         >
-          <button class="w-full">
-            <span>CONTINUE WITH</span>
-            <i class="fab fa-google pl-2"></i>
-          </button>
+          <template v-slot:default>
+            <button class="w-full">
+              <span>CONTINUE WITH</span>
+              <i class="fab fa-google pl-2"></i>
+            </button>
+          </template>
         </GoogleLogin>
         
         <button class="w-full flex items-center justify-center bg-[var(--primary-gold)] text-[var(--secondary-black)] py-2 px-4 rounded-lg transition hover:bg-[var(--hover-darkgold)]" @click="loginWithFacebook">
@@ -119,26 +122,28 @@ const login = async () => {
 const handleCallback = async (response) => {
   try {
     if (response.credential) {
-      // Handle successful Google sign-in
+      // For testing/development - log the response
       console.log('Google login success:', response);
-      
-      // Send the token to your backend
-      const result = await axios.post('/api/auth/google', {
-        credential: response.credential
-      });
-      
-      // Update auth store with the response from your backend
-      const token = result.data.token;
-      const user = jwtDecode(token);
-      
-      authStore.setToken(token);
-      authStore.setUser(user);
-      
-      closeModal();
+      const decodedToken = jwtDecode(response.credential);
+      console.log('Decoded token:', decodedToken);
+
+      // TODO: Uncomment when backend is ready
+      // const result = await axios.post('/api/auth/google', {
+      //   credential: response.credential
+      // });
+      // const token = result.data.token;
+      // const user = jwtDecode(token);
+      // authStore.setToken(token);
+      // authStore.setUser(user);
+      // closeModal();
     }
   } catch (error) {
     console.error('Google login error:', error);
   }
+};
+
+const handleError = (error) => {
+  console.error('Google login error:', error);
 };
 
 const loginWithFacebook = () => {
