@@ -124,9 +124,31 @@ const handleClickOutside = (event) => {
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
+  
+  // Listen for login success events
+  window.eventBus.on('login:success', (data) => {
+    console.log('Login success event received in Navbar.vue:', data);
+    if (loginModal.value) {
+      console.log('Forcing modal to close from Navbar.vue');
+      
+      // Make sure the navbar updates its auth state
+      if (data.user) {
+        console.log('Updating navbar user data');
+      }
+      
+      // Apply additional DOM cleanup for all modals
+      setTimeout(() => {
+        document.querySelectorAll('.fixed.inset-0.flex.justify-center').forEach(modal => {
+          console.log('Force cleanup of modal from Navbar.vue:', modal);
+          modal.style.display = 'none';
+        });
+      }, 100);
+    }
+  });
 });
 
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside);
+  window.eventBus.off('login:success');
 });
 </script>

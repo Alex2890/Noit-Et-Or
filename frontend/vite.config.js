@@ -10,4 +10,14 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src"), // This sets @ to point to src/
     },
   },
+  server: {
+    // Simple proxy configuration for API calls
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:5000',
+        changeOrigin: true,
+        secure: false
+      }
+    }
+  },
 });

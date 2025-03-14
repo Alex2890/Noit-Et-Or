@@ -10,7 +10,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
+import { useAuthStore } from '@/stores/auth';
 import Hero from "@/components/Hero.vue";
 import Featured from "@/components/Featured.vue";
 import AboutUs from "@/components/AboutUs.vue";
@@ -20,20 +21,53 @@ import LoginModal from '@/components/LoginModal.vue';
 
 const loginModal = ref(null);
 
-onMounted(() => {
-  // Check if the user is already logged in (you'll need to implement this logic)
-  const isLoggedIn = checkIfLoggedIn(); // Replace with your authentication check
+const authStore = useAuthStore();
 
-  if (!isLoggedIn) {
-    // If not logged in, open the login modal
-    loginModal.value.openModal();
+// Add a watcher for auth state changes
+watch(() => authStore.isLoggedIn, (newValue) => {
+  console.log('Auth state changed in Home.vue:', newValue);
+  if (newValue && loginModal.value) {
+    console.log('User now logged in, modal should be closed');
+    // Don't call closeModal directly as it may not be exposed
+    // The login.success event handles closing properly
+  }
+}, { immediate: true });
+
+onMounted(() => {
+  console.log('Home component mounted, auth state:', authStore.isLoggedIn);
+  
+  // Add event listener for login success
+  window.eventBus.on('login:success', (data) => {
+    console.log('Login success event received in Home.vue:', data);
+    if (loginModal.value) {
+      console.log('Forcing modal to close from Home.vue');
+      // DOM-based approach instead of calling a method
+      document.querySelectorAll('.login-modal-container').forEach(modal => {
+        console.log('Force cleanup of modal from Home.vue DOM:', modal);
+        modal.style.display = 'none';
+      });
+      
+      // Apply an additional DOM cleanup
+      setTimeout(() => {
+        document.querySelectorAll('.fixed.inset-0.flex.justify-center').forEach(modal => {
+          console.log('Force cleanup of modal from Home.vue:', modal);
+          modal.style.display = 'none';
+        });
+      }, 100);
+    }
+  });
+  
+  // Only show login modal if user is not logged in
+  if (!authStore.isLoggedIn && loginModal.value) {
+    console.log('User not logged in, opening login modal');
+    // If not logged in and modal ref is available, open the login modal
+    setTimeout(() => {
+      loginModal.value?.openModal();
+    }, 500); // Small delay to ensure component is fully mounted
+  } else {
+    console.log('User already logged in, not showing login modal');
   }
 });
-
-const checkIfLoggedIn = () => {
-  const token = localStorage.getItem('token');
-  return !!token; // Returns true if a token exists, false otherwise
-};
 </script>
 
 <style scoped>
